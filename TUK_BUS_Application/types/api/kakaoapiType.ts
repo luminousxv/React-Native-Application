@@ -10,3 +10,9 @@ export type futureArrivalTime = {
     },
   ];
 };
+
+export interface futureRouteSearch {
+  origin: string;
+  destination: string;
+  departure_time: string;
+}
