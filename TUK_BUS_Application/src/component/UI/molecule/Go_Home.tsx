@@ -1,4 +1,4 @@
-import React, {ReactElement, useEffect, useState} from 'react';
+import React, {ReactElement, useState} from 'react';
 import {FlatList, RefreshControl, StatusBar, Text, View} from 'react-native';
 import {TimeInfo} from '../../../../types/navigation/types';
 import {styles} from '../atom/stylesheet';
@@ -46,10 +46,10 @@ export function GoHome(): ReactElement {
     }
   };
 
-  useEffect(() => {
+  useState(() => {
     setupData();
     onRefresh();
-  }, []);
+  });
 
   if (loading === false) {
     return (
