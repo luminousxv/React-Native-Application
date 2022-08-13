@@ -1,4 +1,4 @@
-import React, {ReactElement, useState} from 'react';
+import React, {ReactElement, useEffect, useState} from 'react';
 import {FlatList, RefreshControl, StatusBar, Text, View} from 'react-native';
 import {TimeInfo} from '../../../../types/navigation/types';
 import {styles} from '../atom/stylesheet';
@@ -16,40 +16,55 @@ export function GoUniversity(): ReactElement {
   const [timeinfo, setTimeInfo] = useState<TimeInfo[]>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [bustime, setBustime] = useState<string[]>([]);
 
   const onRefresh = () => {
     setTimeInfo([]);
-    setupData();
+    setBustime([]);
+    setLoading(false);
+    funcA();
     setRefreshing(true);
+    setLoading(true);
     wait(2000).then(() => setRefreshing(false));
   };
 
-  const setupData = async () => {
-    try {
-      for (let x in time) {
-        const {data} = await getArrivalTime(time[x], '등교');
-        setTimeInfo(prev => [
-          ...prev,
-          {
-            time: time[x],
-            remain: CalcRemainTime(time[x]),
-            arrival: CalcArrivalTime(
-              time[x],
-              data.routes[0].sections[0].duration,
-            ),
-          },
-        ]);
-      }
-      setLoading(true);
-    } catch (error) {
-      console.error(error);
-    }
+  const setupData = (duration: number[]) => {
+    console.log('duration', duration);
+
+    bustime.map((item, index) => {
+      setTimeInfo(prev => [
+        ...prev,
+        {
+          time: item,
+          remain: CalcRemainTime(item),
+          arrival: CalcArrivalTime(item, duration[index]),
+        },
+      ]);
+    });
   };
 
-  useState(() => {
-    setupData();
-    onRefresh();
-  });
+  const funcA = async () => {
+    setBustime(time);
+    let duration: number[] = [];
+
+    for (let i = 0; i < time.length; i++) {
+      const {data} = await getArrivalTime(time[i], '등교');
+      duration.push(data.routes[0].sections[0].duration);
+    }
+
+    return new Promise((resolve, reject) => {
+      if (resolve) {
+        resolve(setupData(duration));
+        setLoading(true);
+      } else {
+        reject(console.error('error'));
+      }
+    });
+  };
+
+  useEffect(() => {
+    funcA();
+  }, []);
 
   if (loading === false) {
     return (
