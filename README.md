@@ -9,4 +9,4 @@ TUK BUS Application with React-Native
 - [Axios](https://github.com/axios/axios)
 
 ## API
-- [카카오네비 미래 운행 정보 길찾기]('https://developers.kakaomobility.com/docs/navi-api/future/')
+- [카카오네비 미래 운행 정보 길찾기](https://developers.kakaomobility.com/docs/navi-api/future/)
