@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {ReactElement, useEffect, useState} from 'react';
 import {FlatList, RefreshControl, StatusBar, Text, View} from 'react-native';
 import {TimeInfo} from '../../../../types/navigation/types';
@@ -22,10 +23,10 @@ export function GoUniversity(): ReactElement {
     setTimeInfo([]);
     setBustime([]);
     setLoading(false);
-    funcA();
+    getKakaoFutureRouteSearch();
     setRefreshing(true);
-    setLoading(true);
     wait(2000).then(() => setRefreshing(false));
+    setLoading(true);
   };
 
   const setupData = (duration: number[]) => {
@@ -43,8 +44,8 @@ export function GoUniversity(): ReactElement {
     });
   };
 
-  const funcA = async () => {
-    setBustime(time);
+  const getKakaoFutureRouteSearch = async () => {
+    time.map(item => setBustime(prev => [...prev, item]));
     let duration: number[] = [];
 
     for (let i = 0; i < time.length; i++) {
@@ -63,7 +64,7 @@ export function GoUniversity(): ReactElement {
   };
 
   useEffect(() => {
-    funcA();
+    getKakaoFutureRouteSearch();
   }, []);
 
   if (loading === false) {

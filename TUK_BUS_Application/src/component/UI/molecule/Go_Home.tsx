@@ -1,4 +1,4 @@
-import React, {ReactElement, useState} from 'react';
+import React, {ReactElement, useEffect, useState} from 'react';
 import {FlatList, RefreshControl, StatusBar, Text, View} from 'react-native';
 import {TimeInfo} from '../../../../types/navigation/types';
 import {styles} from '../atom/stylesheet';
@@ -16,40 +16,54 @@ export function GoHome(): ReactElement {
   const [timeinfo, setTimeInfo] = useState<TimeInfo[]>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [bustime, setBustime] = useState<string[]>([]);
 
   const onRefresh = () => {
     setTimeInfo([]);
-    setupData();
+    setBustime([]);
+    setLoading(false);
+    getKakaoFutureRouteSearch();
     setRefreshing(true);
     wait(2000).then(() => setRefreshing(false));
+    setLoading(true);
   };
 
-  const setupData = async () => {
-    try {
-      for (let x in time) {
-        const {data} = await getArrivalTime(time[x], '하교');
-        setTimeInfo(prev => [
-          ...prev,
-          {
-            time: time[x],
-            remain: CalcRemainTime(time[x]),
-            arrival: CalcArrivalTime(
-              time[x],
-              data.routes[0].sections[0].duration,
-            ),
-          },
-        ]);
-      }
-      setLoading(true);
-    } catch (error) {
-      console.error(error);
+  const setupData = (duration: number[]) => {
+    console.log('duration', duration);
+
+    bustime.map((item, index) => {
+      setTimeInfo(prev => [
+        ...prev,
+        {
+          time: item,
+          remain: CalcRemainTime(item),
+          arrival: CalcArrivalTime(item, duration[index]),
+        },
+      ]);
+    });
+  };
+
+  const getKakaoFutureRouteSearch = async () => {
+    time.map(item => setBustime(prev => [...prev, item]));
+    let duration: number[] = [];
+    for (let i = 0; i < time.length; i++) {
+      const {data} = await getArrivalTime(time[i], '하교');
+      duration.push(data.routes[0].sections[0].duration);
     }
+
+    return new Promise((resolve, reject) => {
+      if (resolve) {
+        resolve(setupData(duration));
+        setLoading(true);
+      } else {
+        reject(console.error('error'));
+      }
+    });
   };
 
-  useState(() => {
-    setupData();
-    onRefresh();
-  });
+  useEffect(() => {
+    getKakaoFutureRouteSearch();
+  }, []);
 
   if (loading === false) {
     return (
