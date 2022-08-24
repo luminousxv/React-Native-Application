@@ -37,4 +37,10 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#ADD8E6',
   },
+  timetable_container: {
+    flex: 1,
+    paddingLeft: 30,
+    paddingRight: 60,
+    paddingTop: 20,
+  },
 });
