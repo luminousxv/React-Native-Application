@@ -10,3 +10,7 @@ TUK BUS Application with React-Native
 
 ## API
 - [카카오네비 미래 운행 정보 길찾기]('https://developers.kakaomobility.com/docs/navi-api/future/')
+
+## Library
+- [react navigation]('https://reactnavigation.org')
+- [react-native-page]('https://callstack.github.io/react-native-paper/2.0/index.html')
