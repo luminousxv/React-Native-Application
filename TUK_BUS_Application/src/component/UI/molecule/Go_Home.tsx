@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {ReactElement, useEffect, useState} from 'react';
 import {FlatList, RefreshControl, StatusBar, Text, View} from 'react-native';
 import {TimeInfo} from '../../../../types/navigation/types';
@@ -16,11 +17,11 @@ export function GoHome(): ReactElement {
   const [timeinfo, setTimeInfo] = useState<TimeInfo[]>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [bustime, setBustime] = useState<string[]>([]);
+  const [home_bustime, setHome_Bustime] = useState<string[]>([]);
 
   const onRefresh = () => {
     setTimeInfo([]);
-    setBustime([]);
+    setHome_Bustime([]);
     setLoading(false);
     getKakaoFutureRouteSearch();
     setRefreshing(true);
@@ -29,24 +30,23 @@ export function GoHome(): ReactElement {
   };
 
   const setupData = (duration: number[]) => {
-    console.log('duration', duration);
-
-    bustime.map((item, index) => {
+    for (let i = 0; i < home_bustime.length; i++) {
       setTimeInfo(prev => [
         ...prev,
         {
-          time: item,
-          remain: CalcRemainTime(item),
-          arrival: CalcArrivalTime(item, duration[index]),
+          time: home_bustime[i],
+          remain: CalcRemainTime(home_bustime[i]),
+          arrival: CalcArrivalTime(home_bustime[i], duration[i]),
         },
       ]);
-    });
+    }
+    setLoading(true);
   };
 
   const getKakaoFutureRouteSearch = async () => {
-    time.map(item => setBustime(prev => [...prev, item]));
     let duration: number[] = [];
     for (let i = 0; i < time.length; i++) {
+      home_bustime.push(time[i]);
       const {data} = await getArrivalTime(time[i], '하교');
       duration.push(data.routes[0].sections[0].duration);
     }
@@ -54,7 +54,6 @@ export function GoHome(): ReactElement {
     return new Promise((resolve, reject) => {
       if (resolve) {
         resolve(setupData(duration));
-        setLoading(true);
       } else {
         reject(console.error('error'));
       }

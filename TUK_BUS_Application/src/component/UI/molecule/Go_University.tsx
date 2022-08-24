@@ -17,11 +17,11 @@ export function GoUniversity(): ReactElement {
   const [timeinfo, setTimeInfo] = useState<TimeInfo[]>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [bustime, setBustime] = useState<string[]>([]);
+  const [univ_bustime, setUniv_Bustime] = useState<string[]>([]);
 
   const onRefresh = () => {
     setTimeInfo([]);
-    setBustime([]);
+    setUniv_Bustime([]);
     setLoading(false);
     getKakaoFutureRouteSearch();
     setRefreshing(true);
@@ -30,25 +30,23 @@ export function GoUniversity(): ReactElement {
   };
 
   const setupData = (duration: number[]) => {
-    console.log('duration', duration);
-
-    bustime.map((item, index) => {
+    for (let i = 0; i < univ_bustime.length; i++) {
       setTimeInfo(prev => [
         ...prev,
         {
-          time: item,
-          remain: CalcRemainTime(item),
-          arrival: CalcArrivalTime(item, duration[index]),
+          time: univ_bustime[i],
+          remain: CalcRemainTime(univ_bustime[i]),
+          arrival: CalcArrivalTime(univ_bustime[i], duration[i]),
         },
       ]);
-    });
+    }
+    setLoading(true);
   };
 
   const getKakaoFutureRouteSearch = async () => {
-    time.map(item => setBustime(prev => [...prev, item]));
     let duration: number[] = [];
-
     for (let i = 0; i < time.length; i++) {
+      univ_bustime.push(time[i]);
       const {data} = await getArrivalTime(time[i], '등교');
       duration.push(data.routes[0].sections[0].duration);
     }
@@ -56,7 +54,6 @@ export function GoUniversity(): ReactElement {
     return new Promise((resolve, reject) => {
       if (resolve) {
         resolve(setupData(duration));
-        setLoading(true);
       } else {
         reject(console.error('error'));
       }
