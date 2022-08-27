@@ -33,11 +33,12 @@ export function GoHome(): ReactElement {
     setLoading(false);
     getKakaoFutureRouteSearch();
     setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
+    wait(1000).then(() => setRefreshing(false));
     setLoading(true);
   };
 
   const setupData = (duration: number[]) => {
+    setTimeInfo([]);
     for (let i = 0; i < home_bustime.length; i++) {
       setTimeInfo(prev => [
         ...prev,
@@ -53,6 +54,7 @@ export function GoHome(): ReactElement {
 
   const getKakaoFutureRouteSearch = async () => {
     let duration: number[] = [];
+    setHome_Bustime([]);
     for (let i = 0; i < time.length; i++) {
       home_bustime.push(time[i]);
       const {data} = await getArrivalTime(time[i], '하교');
