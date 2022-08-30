@@ -34,3 +34,7 @@ export type TimeInfo = {
   remain: number;
   arrival: string;
 };
+
+export type flatlistParams = {
+  item: TimeInfo;
+};
