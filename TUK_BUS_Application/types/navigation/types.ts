@@ -1,28 +1,30 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
+  DrawerScreen: undefined;
   TabScreen: undefined;
   TimeTable: {
     status: string;
   };
+  ShuttleLocation: undefined;
 };
 
 export type TabParamList = {
   등교: undefined;
   하교: undefined;
+  전체시간표: undefined;
 };
 
-type Tab_Props = NativeStackScreenProps<RootStackParamList, 'TabScreen'>;
+export type DrawerParamList = {
+  홈: undefined;
+  타는위치: undefined;
+};
+
 type TimeTable_Props = NativeStackScreenProps<RootStackParamList, 'TimeTable'>;
 
-type TabNavigationProp = Tab_Props['navigation'];
 export type TimeTableNavigationProp = TimeTable_Props['navigation'];
 
 export type TimeTableRouteProp = TimeTable_Props['route'];
-
-export type Tab_Screen_Props = {
-  navigation: TabNavigationProp;
-};
 
 export type Time_Table_Props = {
   navigation: TimeTableNavigationProp;
