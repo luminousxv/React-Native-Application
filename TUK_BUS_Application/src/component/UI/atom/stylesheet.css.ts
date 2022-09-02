@@ -26,6 +26,14 @@ export const styles = StyleSheet.create({
   calctime_container: {
     flex: 1,
   },
+  button_container: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    padding: 10,
+    // borderBottomWidth: 1,
+    borderTopWidth: 1,
+    borderColor: 'black',
+  },
   time_text: {
     fontSize: 30,
     textAlign: 'left',
@@ -79,8 +87,25 @@ export const styles = StyleSheet.create({
   },
   timetable_container: {
     flex: 1,
-    paddingLeft: 30,
-    paddingRight: 60,
-    paddingTop: 20,
+    // paddingLeft: 30,
+    // paddingRight: 60,
+    // paddingTop: 20,
+    // paddingLeft: 30,
+    // paddingRight: 60,
+    // paddingTop: 20,
+  },
+  touchable: {
+    flex: 1,
+    borderWidth: 3,
+    borderColor: '#E0E0E0',
+    padding: 10,
+    backgroundColor: 'white',
+  },
+  touchable_text: {
+    textAlign: 'center',
+    fontSize: 15,
+  },
+  webview_container: {
+    flex: 1,
   },
 });
