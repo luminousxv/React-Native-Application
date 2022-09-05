@@ -8,8 +8,8 @@ export default function TimeTable(): ReactElement {
     <View style={styles.timetable_container}>
       <DataTable>
         <DataTable.Header>
-          <DataTable.Title>시간</DataTable.Title>
-          <DataTable.Title>시간</DataTable.Title>
+          <DataTable.Title>등교</DataTable.Title>
+          <DataTable.Title>하교</DataTable.Title>
         </DataTable.Header>
         <DataTable.Row>
           <DataTable.Cell>23:00</DataTable.Cell>
