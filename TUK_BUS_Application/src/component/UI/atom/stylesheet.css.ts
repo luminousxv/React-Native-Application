@@ -42,7 +42,7 @@ export const styles = StyleSheet.create({
     textAlign: 'right',
     fontSize: 18,
     padding: 5,
-    color: 'red',
+    color: '#FF3333',
   },
   arrival_time_text: {
     textAlign: 'right',
@@ -62,22 +62,32 @@ export const styles = StyleSheet.create({
     marginTop: 5,
     color: 'grey',
   },
-  sub_text: {
+  sub_direction_text: {
+    padding: 11,
+    fontSize: 15,
+    color: 'black',
+    textAlign: 'left',
+  },
+  sub_location_text: {
+    padding: 10,
+    fontSize: 15,
+    color: 'black',
+    textAlign: 'right',
+  },
+  sub_title_text: {
     padding: 10,
     fontSize: 20,
     color: 'black',
   },
   sub_container: {
-    flexDirection: 'row',
+    flexDirection: 'column',
+    flex: 1,
   },
   info_container: {
     backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: '#32373C',
-    borderRadius: 15,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 10,
+    marginHorizontal: 10,
   },
   loading: {
     flex: 1,
@@ -87,12 +97,8 @@ export const styles = StyleSheet.create({
   },
   timetable_container: {
     flex: 1,
-    // paddingLeft: 30,
-    // paddingRight: 60,
-    // paddingTop: 20,
-    // paddingLeft: 30,
-    // paddingRight: 60,
-    // paddingTop: 20,
+    marginRight: 30,
+    marginLeft: 30,
   },
   touchable: {
     flex: 1,
@@ -107,5 +113,18 @@ export const styles = StyleSheet.create({
   },
   webview_container: {
     flex: 1,
+  },
+  location_container: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  location_title_container: {
+    backgroundColor: 'white',
+    padding: 10,
+    paddingBottom: 0,
+  },
+  location_title_text: {
+    textAlign: 'center',
+    fontSize: 20,
   },
 });
