@@ -116,15 +116,30 @@ export const styles = StyleSheet.create({
   },
   location_container: {
     flex: 1,
-    justifyContent: 'center',
   },
   location_title_container: {
     backgroundColor: 'white',
     padding: 10,
+    paddingTop: 2,
     paddingBottom: 0,
   },
   location_title_text: {
     textAlign: 'center',
     fontSize: 20,
+  },
+  map_conatiner: {
+    height: 300,
+  },
+  last_map_info_container: {
+    backgroundColor: 'white',
+  },
+  map_info_container: {
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderColor: 'grey',
+  },
+  map_info_text: {
+    marginLeft: 10,
+    color: 'grey',
   },
 });
