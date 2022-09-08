@@ -78,6 +78,7 @@ export const styles = StyleSheet.create({
     padding: 10,
     fontSize: 20,
     color: 'black',
+    textAlign: 'left',
   },
   sub_container: {
     flexDirection: 'column',
@@ -86,8 +87,8 @@ export const styles = StyleSheet.create({
   info_container: {
     backgroundColor: 'white',
     justifyContent: 'center',
-    alignItems: 'center',
     marginHorizontal: 10,
+    marginTop: 4,
   },
   loading: {
     flex: 1,
@@ -141,5 +142,15 @@ export const styles = StyleSheet.create({
   map_info_text: {
     marginLeft: 10,
     color: 'grey',
+  },
+  checkbox_container: {
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginRight: 10,
+  },
+  checkbox_text: {
+    fontSize: 15,
+    marginRight: 10,
   },
 });
