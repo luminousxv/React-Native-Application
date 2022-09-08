@@ -18,3 +18,7 @@ export type TimeInfo = {
 export type flatlistParams = {
   item: TimeInfo;
 };
+
+export type subwayParams = {
+  toggle: boolean;
+};
