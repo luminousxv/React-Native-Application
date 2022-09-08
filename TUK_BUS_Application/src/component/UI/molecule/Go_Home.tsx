@@ -13,6 +13,7 @@ import {styles} from '../atom/stylesheet.css';
 import {CalcArrivalTime, CalcRemainTime} from '../atom/calctime';
 import {getArrivalTime} from '../../../api/arrivalTimeAPI';
 import {InfoContainer, SubwayContainer} from '../atom/info_subway_container';
+import CheckBox from '@react-native-community/checkbox';
 
 const wait = (timeout: number) => {
   return new Promise<void>(resolve => {
@@ -27,6 +28,7 @@ export function GoHome(): ReactElement {
   const [loading, setLoading] = useState<boolean>(false);
   const [home_bustime, setHome_Bustime] = useState<string[]>([]);
   const [isVisible, setVisible] = useState<boolean>(false);
+  const [toggleCheckBox, setToggleCheckBox] = useState<boolean>(false);
 
   const onRefresh = () => {
     setTimeInfo([]);
@@ -108,7 +110,23 @@ export function GoHome(): ReactElement {
                     onPress={() => setVisible(!isVisible)}>
                     <InfoContainer item={item} />
                   </TouchableOpacity>
-                  <View>{!isVisible && <SubwayContainer />}</View>
+                  <View>
+                    {!isVisible && (
+                      <>
+                        <View style={styles.checkbox_container}>
+                          <Text style={styles.checkbox_text}>수인선</Text>
+                          <CheckBox
+                            value={toggleCheckBox}
+                            boxType={'square'}
+                            onValueChange={() =>
+                              setToggleCheckBox(!toggleCheckBox)
+                            }
+                          />
+                        </View>
+                        <SubwayContainer toggle={toggleCheckBox} />
+                      </>
+                    )}
+                  </View>
                 </View>
               );
             }
