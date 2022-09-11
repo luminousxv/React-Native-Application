@@ -69,7 +69,7 @@ export const styles = StyleSheet.create({
     textAlign: 'left',
   },
   sub_location_text: {
-    padding: 10,
+    padding: 11,
     fontSize: 15,
     color: 'black',
     textAlign: 'right',
@@ -81,14 +81,32 @@ export const styles = StyleSheet.create({
     textAlign: 'left',
   },
   sub_container: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     flex: 1,
+  },
+  sub_container_border: {
+    flexDirection: 'row',
+    flex: 1,
+    borderBottomWidth: 1,
+    borderColor: '#d3d3d3',
+  },
+  line_4: {
+    padding: 11,
+    fontSize: 15,
+    color: '#00A5DE',
+    textAlign: 'left',
+  },
+  suin_bundang: {
+    padding: 11,
+    fontSize: 15,
+    color: '#F5A200',
+    textAlign: 'left',
   },
   info_container: {
     backgroundColor: 'white',
     justifyContent: 'center',
     marginHorizontal: 10,
-    marginTop: 4,
+    padding: 5,
   },
   loading: {
     flex: 1,
