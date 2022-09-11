@@ -2,7 +2,6 @@ import React, {ReactElement} from 'react';
 import {Text, View} from 'react-native';
 import {WebView} from 'react-native-webview';
 import {styles} from '../atom/stylesheet.css';
-import {kakaomap_url} from '../../../api/auth';
 
 export function ShuttleLocation(): ReactElement {
   return (
@@ -15,7 +14,7 @@ export function ShuttleLocation(): ReactElement {
         style={styles.map_conatiner}
         javaScriptEnabled={true}
         source={{
-          uri: kakaomap_url.goUniv,
+          uri: 'http://tuk-bus.epizy.com/goUniv.html',
         }}
       />
       <View style={styles.map_info_container}>
@@ -31,7 +30,7 @@ export function ShuttleLocation(): ReactElement {
         javaScriptEnabled={true}
         style={styles.map_conatiner}
         source={{
-          uri: kakaomap_url.goUniv_night,
+          uri: 'http://tuk-bus.epizy.com/goUniv_night.html',
         }}
       />
       <View style={styles.map_info_container}>
@@ -45,7 +44,7 @@ export function ShuttleLocation(): ReactElement {
         nestedScrollEnabled
         style={styles.map_conatiner}
         source={{
-          uri: kakaomap_url.goHome,
+          uri: 'http://tuk-bus.epizy.com/goHome.html',
         }}
       />
       <View style={styles.last_map_info_container}>
