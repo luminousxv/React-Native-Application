@@ -8,18 +8,19 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {TimeInfo} from '../../../../types/navigation/types';
+import {SubwayInfo, TimeInfo} from '../../../../types/navigation/types';
 import {styles} from '../atom/stylesheet.css';
 import {CalcArrivalTime, CalcRemainTime} from '../atom/calctime';
 import {getArrivalTime} from '../../../api/arrivalTimeAPI';
 import {InfoContainer, SubwayContainer} from '../atom/info_subway_container';
+import {getHomeSchedule} from '../../../api/serverAPI';
+import {liveSchedule2} from '../../../../types/api/awsapiType';
 
 const wait = (timeout: number) => {
   return new Promise<void>(resolve => {
     setTimeout(resolve, timeout);
   });
 };
-const time = ['23:00', '23:20', '23:40', '23:50'];
 
 export function GoHome(): ReactElement {
   const [timeinfo, setTimeInfo] = useState<TimeInfo[]>([]);
@@ -27,12 +28,14 @@ export function GoHome(): ReactElement {
   const [loading, setLoading] = useState<boolean>(false);
   const [home_bustime, setHome_Bustime] = useState<string[]>([]);
   const [isVisible, setVisible] = useState<boolean>(false);
+  const [subwayinfo, setSubwayInfo] = useState<SubwayInfo[]>([]);
 
   const onRefresh = () => {
     setTimeInfo([]);
     setHome_Bustime([]);
+    setSubwayInfo([]);
     setLoading(false);
-    getKakaoFutureRouteSearch();
+    getLiveBusSchedule();
     setRefreshing(true);
     wait(1000).then(() => setRefreshing(false));
     setLoading(true);
@@ -53,12 +56,23 @@ export function GoHome(): ReactElement {
     setLoading(true);
   };
 
-  const getKakaoFutureRouteSearch = async () => {
+  const getKakaoFutureRouteSearch = async (schedule: liveSchedule2) => {
     let duration: number[] = [];
     setHome_Bustime([]);
-    for (let i = 0; i < time.length; i++) {
-      home_bustime.push(time[i]);
-      const {data} = await getArrivalTime(time[i], '하교');
+    for (let i = 0; i < schedule.Bus_schedule.length; i++) {
+      if (schedule.Bus_schedule[i].min === 0) {
+        home_bustime.push(
+          schedule.Bus_schedule[i].hour +
+            ':' +
+            schedule.Bus_schedule[i].min +
+            '0',
+        );
+      } else {
+        home_bustime.push(
+          schedule.Bus_schedule[i].hour + ':' + schedule.Bus_schedule[i].min,
+        );
+      }
+      const {data} = await getArrivalTime(home_bustime[i], '하교');
       duration.push(data.routes[0].sections[0].duration);
     }
 
@@ -71,8 +85,33 @@ export function GoHome(): ReactElement {
     });
   };
 
+  const setupSubwayInfo = (data: liveSchedule2) => {
+    for (let i = 0; i < data.Subway_schedule.length; i++) {
+      setSubwayInfo(prev => [
+        ...prev,
+        {
+          bstatnNm: data.Subway_schedule[i].bstatnNm,
+          arvlMsg2: data.Subway_schedule[i].arvlMsg2,
+          arvlMsg3: data.Subway_schedule[i].arvlMsg3,
+        },
+      ]);
+    }
+  };
+
+  const getLiveBusSchedule = async () => {
+    const {data} = await getHomeSchedule();
+    return new Promise((resolve, reject) => {
+      if (resolve) {
+        resolve(getKakaoFutureRouteSearch(data));
+        resolve(setupSubwayInfo(data));
+      } else {
+        reject(console.error('error'));
+      }
+    });
+  };
+
   useEffect(() => {
-    getKakaoFutureRouteSearch();
+    getLiveBusSchedule();
   }, []);
 
   if (loading === false) {
@@ -108,7 +147,7 @@ export function GoHome(): ReactElement {
                     onPress={() => setVisible(!isVisible)}>
                     <InfoContainer item={item} />
                   </TouchableOpacity>
-                  {!isVisible && <SubwayContainer />}
+                  {!isVisible && <SubwayContainer data={subwayinfo} />}
                 </View>
               );
             }

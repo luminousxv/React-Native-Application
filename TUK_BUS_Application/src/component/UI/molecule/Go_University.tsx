@@ -8,18 +8,19 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {TimeInfo} from '../../../../types/navigation/types';
+import {SubwayInfo, TimeInfo} from '../../../../types/navigation/types';
 import {styles} from '../atom/stylesheet.css';
 import {CalcArrivalTime, CalcRemainTime} from '../atom/calctime';
 import {getArrivalTime} from '../../../api/arrivalTimeAPI';
 import {InfoContainer, SubwayContainer} from '../atom/info_subway_container';
+import {getUnivSchedule} from '../../../api/serverAPI';
+import {liveSchedule} from '../../../../types/api/awsapiType';
 
 const wait = (timeout: number) => {
   return new Promise<void>(resolve => {
     setTimeout(resolve, timeout);
   });
 };
-const time = ['23:00', '23:20', '23:40', '23:50'];
 
 export function GoUniversity(): ReactElement {
   const [timeinfo, setTimeInfo] = useState<TimeInfo[]>([]);
@@ -27,12 +28,14 @@ export function GoUniversity(): ReactElement {
   const [loading, setLoading] = useState<boolean>(false);
   const [univ_bustime, setUniv_Bustime] = useState<string[]>([]);
   const [isVisible, setVisible] = useState<boolean>(false);
+  const [subwayinfo, setSubwayInfo] = useState<SubwayInfo[]>([]);
 
   const onRefresh = () => {
     setTimeInfo([]);
     setUniv_Bustime([]);
+    setSubwayInfo([]);
     setLoading(false);
-    getKakaoFutureRouteSearch();
+    getLiveBusSchedule();
     setRefreshing(true);
     wait(1000).then(() => setRefreshing(false));
     setLoading(true);
@@ -53,12 +56,20 @@ export function GoUniversity(): ReactElement {
     setLoading(true);
   };
 
-  const getKakaoFutureRouteSearch = async () => {
+  const getKakaoFutureRouteSearch = async (schedule: liveSchedule) => {
     let duration: number[] = [];
     setUniv_Bustime([]);
-    for (let i = 0; i < time.length; i++) {
-      univ_bustime.push(time[i]);
-      const {data} = await getArrivalTime(time[i], '등교');
+    for (let i = 0; i < schedule.message.length; i++) {
+      if (schedule.message[i].min === 0) {
+        univ_bustime.push(
+          schedule.message[i].hour + ':' + schedule.message[i].min + '0',
+        );
+      } else {
+        univ_bustime.push(
+          schedule.message[i].hour + ':' + schedule.message[i].min,
+        );
+      }
+      const {data} = await getArrivalTime(univ_bustime[i], '등교');
       duration.push(data.routes[0].sections[0].duration);
     }
 
@@ -71,8 +82,33 @@ export function GoUniversity(): ReactElement {
     });
   };
 
+  const setupSubwayInfo = (data: liveSchedule) => {
+    for (let i = 0; i < data.Subway_schedule.length; i++) {
+      setSubwayInfo(prev => [
+        ...prev,
+        {
+          bstatnNm: data.Subway_schedule[i].bstatnNm,
+          arvlMsg2: data.Subway_schedule[i].arvlMsg2,
+          arvlMsg3: data.Subway_schedule[i].arvlMsg3,
+        },
+      ]);
+    }
+  };
+
+  const getLiveBusSchedule = async () => {
+    const {data} = await getUnivSchedule();
+    return new Promise((resolve, reject) => {
+      if (resolve) {
+        resolve(getKakaoFutureRouteSearch(data));
+        resolve(setupSubwayInfo(data));
+      } else {
+        reject(console.error('error'));
+      }
+    });
+  };
+
   useEffect(() => {
-    getKakaoFutureRouteSearch();
+    getLiveBusSchedule();
   }, []);
 
   if (loading === false) {
@@ -108,7 +144,7 @@ export function GoUniversity(): ReactElement {
                     onPress={() => setVisible(!isVisible)}>
                     <InfoContainer item={item} />
                   </TouchableOpacity>
-                  {!isVisible && <SubwayContainer />}
+                  {!isVisible && <SubwayContainer data={subwayinfo} />}
                 </View>
               );
             }

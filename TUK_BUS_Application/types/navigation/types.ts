@@ -20,5 +20,21 @@ export type flatlistParams = {
 };
 
 export type subwayParams = {
-  toggle: boolean;
+  data: SubwayInfo[];
+};
+
+export type SubwayInfo = {
+  bstatnNm: string;
+  arvlMsg2: string;
+  arvlMsg3: string;
+};
+
+export type all_schedule = {
+  station: timedata;
+  university: timedata;
+};
+
+export type timedata = {
+  hour: number;
+  min: number;
 };
