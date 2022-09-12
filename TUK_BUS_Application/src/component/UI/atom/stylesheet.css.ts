@@ -116,8 +116,9 @@ export const styles = StyleSheet.create({
   },
   timetable_container: {
     flex: 1,
-    marginRight: 30,
-    marginLeft: 30,
+    flexDirection: 'row',
+    marginRight: 20,
+    marginLeft: 20,
   },
   touchable: {
     flex: 1,
@@ -170,5 +171,20 @@ export const styles = StyleSheet.create({
   checkbox_text: {
     fontSize: 15,
     marginRight: 10,
+  },
+  endofSerivce_container: {
+    flexDirection: 'row',
+    borderRadius: 15,
+    borderWidth: 8,
+    backgroundColor: '#ffffff',
+    borderColor: '#E0E0E0',
+    paddingRight: 10,
+    paddingLeft: 10,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  endofService_font: {
+    fontSize: 15,
   },
 });
