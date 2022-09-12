@@ -29,6 +29,7 @@ export function GoUniversity(): ReactElement {
   const [univ_bustime, setUniv_Bustime] = useState<string[]>([]);
   const [isVisible, setVisible] = useState<boolean>(false);
   const [subwayinfo, setSubwayInfo] = useState<SubwayInfo[]>([]);
+  const [endofService, setEndofService] = useState<boolean>(false);
 
   const onRefresh = () => {
     setTimeInfo([]);
@@ -59,14 +60,22 @@ export function GoUniversity(): ReactElement {
   const getKakaoFutureRouteSearch = async (schedule: liveSchedule) => {
     let duration: number[] = [];
     setUniv_Bustime([]);
-    for (let i = 0; i < schedule.message.length; i++) {
-      if (schedule.message[i].min === 0) {
+    if (schedule.Bus_schedule.length === 0) {
+      setEndofService(true);
+      setLoading(true);
+      return;
+    }
+    for (let i = 0; i < schedule.Bus_schedule.length; i++) {
+      if (schedule.Bus_schedule[i].min === 0) {
         univ_bustime.push(
-          schedule.message[i].hour + ':' + schedule.message[i].min + '0',
+          schedule.Bus_schedule[i].hour +
+            ':' +
+            schedule.Bus_schedule[i].min +
+            '0',
         );
       } else {
         univ_bustime.push(
-          schedule.message[i].hour + ':' + schedule.message[i].min,
+          schedule.Bus_schedule[i].hour + ':' + schedule.Bus_schedule[i].min,
         );
       }
       const {data} = await getArrivalTime(univ_bustime[i], '등교');
@@ -115,6 +124,14 @@ export function GoUniversity(): ReactElement {
     return (
       <View style={styles.loading}>
         <Text>Loading...</Text>
+      </View>
+    );
+  } else if (endofService === true) {
+    return (
+      <View>
+        <View style={styles.endofSerivce_container}>
+          <Text style={styles.endofService_font}>운행종료</Text>
+        </View>
       </View>
     );
   } else {

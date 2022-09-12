@@ -14,7 +14,7 @@ import {CalcArrivalTime, CalcRemainTime} from '../atom/calctime';
 import {getArrivalTime} from '../../../api/arrivalTimeAPI';
 import {InfoContainer, SubwayContainer} from '../atom/info_subway_container';
 import {getHomeSchedule} from '../../../api/serverAPI';
-import {liveSchedule2} from '../../../../types/api/awsapiType';
+import {liveSchedule} from '../../../../types/api/awsapiType';
 
 const wait = (timeout: number) => {
   return new Promise<void>(resolve => {
@@ -29,6 +29,7 @@ export function GoHome(): ReactElement {
   const [home_bustime, setHome_Bustime] = useState<string[]>([]);
   const [isVisible, setVisible] = useState<boolean>(false);
   const [subwayinfo, setSubwayInfo] = useState<SubwayInfo[]>([]);
+  const [endofService, setEndofService] = useState<boolean>(false);
 
   const onRefresh = () => {
     setTimeInfo([]);
@@ -56,9 +57,14 @@ export function GoHome(): ReactElement {
     setLoading(true);
   };
 
-  const getKakaoFutureRouteSearch = async (schedule: liveSchedule2) => {
+  const getKakaoFutureRouteSearch = async (schedule: liveSchedule) => {
     let duration: number[] = [];
     setHome_Bustime([]);
+    if (schedule.Bus_schedule.length === 0) {
+      setEndofService(true);
+      setLoading(true);
+      return;
+    }
     for (let i = 0; i < schedule.Bus_schedule.length; i++) {
       if (schedule.Bus_schedule[i].min === 0) {
         home_bustime.push(
@@ -85,7 +91,7 @@ export function GoHome(): ReactElement {
     });
   };
 
-  const setupSubwayInfo = (data: liveSchedule2) => {
+  const setupSubwayInfo = (data: liveSchedule) => {
     for (let i = 0; i < data.Subway_schedule.length; i++) {
       setSubwayInfo(prev => [
         ...prev,
@@ -118,6 +124,14 @@ export function GoHome(): ReactElement {
     return (
       <View style={styles.loading}>
         <Text>Loading...</Text>
+      </View>
+    );
+  } else if (endofService === true) {
+    return (
+      <View>
+        <View style={styles.endofSerivce_container}>
+          <Text style={styles.endofService_font}>운행종료</Text>
+        </View>
       </View>
     );
   } else {
