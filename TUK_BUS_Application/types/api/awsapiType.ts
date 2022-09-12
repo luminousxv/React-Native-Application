@@ -1,9 +1,4 @@
 export type liveSchedule = {
-  message: bus_schedule[];
-  Subway_schedule: subway_schedule[];
-};
-
-export type liveSchedule2 = {
   Bus_schedule: bus_schedule[];
   Subway_schedule: subway_schedule[];
 };
@@ -25,7 +20,7 @@ type subway_schedule = {
 
 export type allSchedule = {
   success: boolean;
-  message: schedule[];
+  Bus_schedule: schedule[];
 };
 
 export type schedule = {

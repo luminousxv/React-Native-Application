@@ -30,11 +30,11 @@ export type SubwayInfo = {
 };
 
 export type all_schedule = {
-  station: timedata;
-  university: timedata;
+  station: string;
+  university: string;
 };
 
 export type timedata = {
-  hour: number;
-  min: number;
+  hour: string;
+  min: string;
 };

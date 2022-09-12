@@ -1,9 +1,5 @@
 import axios, {AxiosResponse} from 'axios';
-import {
-  allSchedule,
-  liveSchedule,
-  liveSchedule2,
-} from '../../types/api/awsapiType';
+import {allSchedule, liveSchedule} from '../../types/api/awsapiType';
 import {server_url} from './auth';
 
 export function getUnivSchedule(): Promise<AxiosResponse<liveSchedule>> {
@@ -11,7 +7,7 @@ export function getUnivSchedule(): Promise<AxiosResponse<liveSchedule>> {
   return axios.get(baseurl);
 }
 
-export function getHomeSchedule(): Promise<AxiosResponse<liveSchedule2>> {
+export function getHomeSchedule(): Promise<AxiosResponse<liveSchedule>> {
   const baseurl: string = server_url.goHome;
   return axios.get(baseurl);
 }
