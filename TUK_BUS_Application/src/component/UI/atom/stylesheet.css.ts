@@ -148,19 +148,20 @@ export const styles = StyleSheet.create({
     fontSize: 20,
   },
   map_conatiner: {
-    height: 300,
+    flex: 2,
+    height: '100%',
   },
   last_map_info_container: {
     backgroundColor: 'white',
   },
   map_info_container: {
     backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderColor: 'grey',
+    flex: 1,
   },
   map_info_text: {
     marginLeft: 10,
     color: 'grey',
+    fontSize: 15,
   },
   checkbox_container: {
     justifyContent: 'flex-end',
