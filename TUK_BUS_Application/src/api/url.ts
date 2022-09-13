@@ -1,5 +1,6 @@
 import {futureRouteSearch} from '../../types/api/kakaoapiType';
 import moment from 'moment';
+import {server_ip} from './auth';
 
 export function FutureRouteSearchURL(params: futureRouteSearch): string {
   const baseurl = `https://apis-navi.kakaomobility.com/v1/future/directions?origin=${params.origin}&destination=${params.destination}&departure_time=${params.departure_time}`;
@@ -30,3 +31,9 @@ export function setFutureRouteSearchParams(
 
   return params;
 }
+
+export const server_url = {
+  goUniv: `http://${server_ip}/api/getSchedule/toTuk`,
+  goHome: `http://${server_ip}/api/getSchedule/toStation`,
+  entire_schedule: `http://${server_ip}/api/getSchedule/all`,
+};

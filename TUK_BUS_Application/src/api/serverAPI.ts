@@ -1,6 +1,6 @@
 import axios, {AxiosResponse} from 'axios';
 import {allSchedule, liveSchedule} from '../../types/api/awsapiType';
-import {server_url} from './auth';
+import {server_url} from './url';
 
 export function getUnivSchedule(): Promise<AxiosResponse<liveSchedule>> {
   const baseurl: string = server_url.goUniv;
