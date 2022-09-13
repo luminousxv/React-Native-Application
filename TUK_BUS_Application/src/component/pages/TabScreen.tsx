@@ -4,8 +4,8 @@ import {TabParamList} from '../../../types/navigation/types';
 import {TabBarIcon} from '../UI/atom/barIcon';
 import {GoHome} from '../UI/molecule/Go_Home';
 import {GoUniversity} from '../UI/molecule/Go_University';
-import {ShuttleLocation} from '../UI/molecule/Shuttle_Location';
 import TimeTable from '../UI/molecule/TimeTable';
+import MaterialTabScreen from './MaterialTabScreen';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -29,7 +29,7 @@ export default function TabScreen(): ReactElement {
         options={{title: '실시간 하교'}}
       />
       <Tab.Screen name="전체시간표" component={TimeTable} />
-      <Tab.Screen name="타는위치" component={ShuttleLocation} />
+      <Tab.Screen name="타는위치" component={MaterialTabScreen} />
     </Tab.Navigator>
   );
 }
