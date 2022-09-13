@@ -9,6 +9,12 @@ export type TabParamList = {
   타는위치: undefined;
 };
 
+export type MaterialTabParamList = {
+  등교: undefined;
+  '등교(17:30~)': undefined;
+  하교: undefined;
+};
+
 export type TimeInfo = {
   time: string;
   remain: number;
