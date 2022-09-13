@@ -66,17 +66,30 @@ export function GoHome(): ReactElement {
       return;
     }
     for (let i = 0; i < schedule.Bus_schedule.length; i++) {
-      if (schedule.Bus_schedule[i].min === 0) {
-        home_bustime.push(
-          schedule.Bus_schedule[i].hour +
-            ':' +
-            schedule.Bus_schedule[i].min +
-            '0',
-        );
-      } else {
-        home_bustime.push(
-          schedule.Bus_schedule[i].hour + ':' + schedule.Bus_schedule[i].min,
-        );
+      switch (schedule.Bus_schedule[i].min) {
+        case 0: {
+          home_bustime.push(
+            schedule.Bus_schedule[i].hour +
+              ':' +
+              schedule.Bus_schedule[i].min +
+              '0',
+          );
+          break;
+        }
+        case 5: {
+          home_bustime.push(
+            schedule.Bus_schedule[i].hour +
+              ':' +
+              '0' +
+              schedule.Bus_schedule[i].min,
+          );
+          break;
+        }
+        default: {
+          home_bustime.push(
+            schedule.Bus_schedule[i].hour + ':' + schedule.Bus_schedule[i].min,
+          );
+        }
       }
       const {data} = await getArrivalTime(home_bustime[i], '하교');
       duration.push(data.routes[0].sections[0].duration);
