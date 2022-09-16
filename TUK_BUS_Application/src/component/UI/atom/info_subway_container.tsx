@@ -54,6 +54,10 @@ export function SubwayContainer({data}: subwayParams): ReactElement {
           incheon.push(data[i].arvlMsg2);
           break;
         }
+        case '청량리행': {
+          wangsimli.push('(청량리행) ' + data[i].arvlMsg2);
+          break;
+        }
       }
     }
 

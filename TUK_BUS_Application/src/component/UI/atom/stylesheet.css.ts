@@ -136,6 +136,7 @@ export const styles = StyleSheet.create({
   },
   location_container: {
     flex: 1,
+    flexDirection: 'column',
   },
   location_title_container: {
     backgroundColor: 'white',
@@ -148,20 +149,21 @@ export const styles = StyleSheet.create({
     fontSize: 20,
   },
   map_conatiner: {
-    flex: 2,
-    height: '100%',
+    height: 200,
+    flex: 5,
   },
   last_map_info_container: {
     backgroundColor: 'white',
   },
   map_info_container: {
     backgroundColor: 'white',
-    flex: 1,
+    flex: 3,
   },
   map_info_text: {
+    flex: 1,
     marginLeft: 10,
     color: 'grey',
-    fontSize: 15,
+    fontSize: 17,
   },
   checkbox_container: {
     justifyContent: 'flex-end',
