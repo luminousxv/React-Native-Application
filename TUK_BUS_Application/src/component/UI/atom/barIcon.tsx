@@ -27,5 +27,5 @@ export const TabBarIcon = (focused: boolean, name: string): JSX.Element => {
   }
 
   iconSize = focused ? 35 : 25;
-  return <Icon name={iconName} size={iconSize} />;
+  return <Icon name={iconName} size={iconSize} color="black" />;
 };

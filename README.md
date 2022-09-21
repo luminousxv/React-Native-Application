@@ -6,7 +6,6 @@ TUK BUS Application with React-Native
 - <img src="https://img.shields.io/badge/Xcode-147EFB?style=flat-square&logo=Xcode&logoColor=black"/>
 - <img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=flat-square&logo=Visual Studio Code&logoColor=black"/>
 - <img src="https://img.shields.io/badge/Sourcetree-0052CC?style=flat-square&logo=Sourcetree&logoColor=black"/>
-- <img src="https://img.shields.io/badge/Nuxt.js-00DC82?style=flat-square&logo=Nuxt.js&logoColor=black">
 - [Axios](https://github.com/axios/axios)
 - [webview](https://github.com/react-native-webview/react-native-webview)
 
@@ -34,3 +33,9 @@ TUK BUS Application with React-Native
 <img src="./image/shuttle_location.gif" width=300>
 
 [webview](https://github.com/react-native-webview/react-native-webview) 를 활용해 [카카오맵 지도 생성](https://apis.map.kakao.com/web/sample/basicMap/)을 해 타는 위치를 표시한다.
+
+### 17시 이후 등교
+<img src="./image/17시이후등교.png" width=300>
+
+### 상시운행
+<img src="./image/상시운행.png" width=300>

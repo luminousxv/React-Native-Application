@@ -2,8 +2,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React, {ReactElement} from 'react';
 import {TabParamList} from '../../../types/navigation/types';
 import {TabBarIcon} from '../UI/atom/barIcon';
-import {GoHome} from '../UI/molecule/Go_Home';
-import {GoUniversity} from '../UI/molecule/Go_University';
+import {GoHome} from '../pages/Go_Home';
+import {GoUniversity} from '../pages/Go_University';
 import TimeTable from '../UI/molecule/TimeTable';
 import MaterialTabScreen from './MaterialTabScreen';
 

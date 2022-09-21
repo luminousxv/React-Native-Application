@@ -1,20 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {ReactElement, useEffect, useState} from 'react';
-import {
-  FlatList,
-  RefreshControl,
-  StatusBar,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {SubwayInfo, TimeInfo} from '../../../../types/navigation/types';
-import {styles} from '../atom/stylesheet.css';
-import {CalcArrivalTime, CalcRemainTime} from '../atom/calctime';
-import {getArrivalTime} from '../../../api/arrivalTimeAPI';
-import {InfoContainer, SubwayContainer} from '../atom/info_subway_container';
-import {getUnivSchedule} from '../../../api/serverAPI';
-import {liveSchedule} from '../../../../types/api/awsapiType';
+import {SubwayInfo, TimeInfo} from '../../../types/navigation/types';
+import {CalcArrivalTime, CalcRemainTime, checkDest} from '../../util/calctime';
+import {getArrivalTime} from '../../api/arrivalTimeAPI';
+import {getUnivSchedule} from '../../api/serverAPI';
+import {liveSchedule} from '../../../types/api/awsapiType';
+import LiveSchedule from '../UI/molecule/live_schedule';
+import Loading from './Loading';
+import ExclusiveComponent from '../UI/common/component/exclusive_component';
 
 const wait = (timeout: number) => {
   return new Promise<void>(resolve => {
@@ -25,21 +18,25 @@ const wait = (timeout: number) => {
 export function GoUniversity(): ReactElement {
   const [timeinfo, setTimeInfo] = useState<TimeInfo[]>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [univ_bustime, setUniv_Bustime] = useState<string[]>([]);
   const [isVisible, setVisible] = useState<boolean>(false);
   const [subwayinfo, setSubwayInfo] = useState<SubwayInfo[]>([]);
   const [endofService, setEndofService] = useState<boolean>(false);
+  const [alwaysOn, setAlwaysOn] = useState<boolean>(false);
+  const [rideArrival, setRideArrival] = useState<boolean>(false);
 
   const onRefresh = () => {
     setTimeInfo([]);
     setUniv_Bustime([]);
     setSubwayInfo([]);
-    setLoading(false);
+    setAlwaysOn(false);
+    setRideArrival(false);
+    setLoading(true);
     getLiveBusSchedule();
     setRefreshing(true);
     wait(1000).then(() => setRefreshing(false));
-    setLoading(true);
+    setLoading(false);
   };
 
   const setupData = (duration: number[]) => {
@@ -54,7 +51,7 @@ export function GoUniversity(): ReactElement {
         },
       ]);
     }
-    setLoading(true);
+    setLoading(false);
   };
 
   const getKakaoFutureRouteSearch = async (schedule: liveSchedule) => {
@@ -62,7 +59,7 @@ export function GoUniversity(): ReactElement {
     setUniv_Bustime([]);
     if (schedule.Bus_schedule.length === 0) {
       setEndofService(true);
-      setLoading(true);
+      setLoading(false);
       return;
     }
     for (let i = 0; i < schedule.Bus_schedule.length; i++) {
@@ -118,74 +115,65 @@ export function GoUniversity(): ReactElement {
   };
 
   const getLiveBusSchedule = async () => {
-    const {data} = await getUnivSchedule();
-    return new Promise((resolve, reject) => {
-      if (resolve) {
-        resolve(getKakaoFutureRouteSearch(data));
-        resolve(setupSubwayInfo(data));
-      } else {
-        reject(console.error('error'));
+    const checkTime: 0 | 1 | 2 | undefined = checkDest('등교');
+    switch (checkTime) {
+      case 0: {
+        const {data} = await getUnivSchedule();
+        return new Promise((resolve, reject) => {
+          if (resolve) {
+            resolve(getKakaoFutureRouteSearch(data));
+            resolve(setupSubwayInfo(data));
+          } else {
+            reject(console.error('error'));
+          }
+        });
       }
-    });
+      case 1: {
+        const {data} = await getUnivSchedule();
+        return new Promise((resolve, reject) => {
+          if (resolve) {
+            resolve(setupSubwayInfo(data));
+            resolve(setAlwaysOn(true));
+            resolve(setLoading(false));
+          } else {
+            reject(console.error('error'));
+          }
+        });
+      }
+      case 2: {
+        setRideArrival(true);
+        setLoading(false);
+        return;
+      }
+      default: {
+        console.error('switch error');
+        return;
+      }
+    }
   };
 
   useEffect(() => {
     getLiveBusSchedule();
   }, []);
 
-  if (loading === false) {
-    return (
-      <View style={styles.loading}>
-        <Text>Loading...</Text>
-      </View>
-    );
-  } else if (endofService === true) {
-    return (
-      <View>
-        <View style={styles.endofSerivce_container}>
-          <Text style={styles.endofService_font}>운행종료</Text>
-        </View>
-      </View>
-    );
-  } else {
-    return (
-      <View style={styles.container}>
-        <StatusBar
-          animated={true}
-          barStyle={'dark-content'}
-          translucent={true}
-          backgroundColor={'transparent'}
-        />
-        <FlatList
-          data={timeinfo}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              tintColor={'black'}
-            />
-          }
-          renderItem={({item, index}) => {
-            if (index === 0) {
-              return (
-                <View>
-                  <TouchableOpacity
-                    style={styles.arrival_container}
-                    onPress={() => setVisible(!isVisible)}>
-                    <InfoContainer item={item} />
-                  </TouchableOpacity>
-                  {!isVisible && <SubwayContainer data={subwayinfo} />}
-                </View>
-              );
-            }
-            return (
-              <View style={styles.arrival_container}>
-                <InfoContainer item={item} />
-              </View>
-            );
-          }}
-        />
-      </View>
-    );
-  }
+  return loading ? (
+    <Loading />
+  ) : rideArrival ? (
+    <ExclusiveComponent
+      item1={'17시 이후부턴 하교 도착 지점에서 곧바로 탑니다.'}
+      item2={'하교시간표를 참고하세요.'}
+    />
+  ) : (
+    <LiveSchedule
+      timeinfo={timeinfo}
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+      setVisible={setVisible}
+      isVisible={isVisible}
+      subwayinfo={subwayinfo}
+      endofService={endofService}
+      alwaysOn={alwaysOn}
+      text="08:40~10:20 까지"
+    />
+  );
 }

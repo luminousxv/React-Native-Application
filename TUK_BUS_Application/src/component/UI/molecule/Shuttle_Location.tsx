@@ -1,7 +1,7 @@
 import React, {ReactElement} from 'react';
 import {Text, View} from 'react-native';
 import {WebView} from 'react-native-webview';
-import {styles} from '../atom/stylesheet.css';
+import {styles} from '../../../style/stylesheet.css';
 import {LogBox} from 'react-native';
 LogBox.ignoreLogs([
   'Sending `onAnimatedValueUpdate` with no listeners registered.',

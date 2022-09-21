@@ -3,7 +3,7 @@ import {
   futureArrivalTime,
   futureRouteSearch,
 } from '../../types/api/kakaoapiType';
-import {auth} from './auth';
+import {auth} from '../../.env/auth';
 import {FutureRouteSearchURL, setFutureRouteSearchParams} from './url';
 
 export function getArrivalTime(
