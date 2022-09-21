@@ -1,7 +1,10 @@
 import React, {ReactElement} from 'react';
 import {Text, View} from 'react-native';
-import {flatlistParams, subwayParams} from '../../../../types/navigation/types';
-import {styles} from './stylesheet.css';
+import {
+  flatlistParams,
+  subwayParams,
+} from '../../../../../types/navigation/types';
+import {styles} from '../../../../style/stylesheet.css';
 
 export function InfoContainer({item}: flatlistParams): ReactElement {
   return (

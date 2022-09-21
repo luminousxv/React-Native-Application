@@ -5,7 +5,7 @@ import {DataTable} from 'react-native-paper';
 import {schedule} from '../../../../types/api/awsapiType';
 import {all_schedule, timedata} from '../../../../types/navigation/types';
 import {getEntireSchedule} from '../../../api/serverAPI';
-import {styles} from '../atom/stylesheet.css';
+import {styles} from '../../../style/stylesheet.css';
 
 export default function TimeTable(): ReactElement {
   const [totalschedule] = useState<all_schedule[]>([]);
