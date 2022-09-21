@@ -1,6 +1,6 @@
 import {futureRouteSearch} from '../../types/api/kakaoapiType';
 import moment from 'moment';
-import {server_ip} from './auth';
+import {server_ip} from '../../.env/auth';
 
 export function FutureRouteSearchURL(params: futureRouteSearch): string {
   const baseurl = `https://apis-navi.kakaomobility.com/v1/future/directions?origin=${params.origin}&destination=${params.destination}&departure_time=${params.departure_time}`;
