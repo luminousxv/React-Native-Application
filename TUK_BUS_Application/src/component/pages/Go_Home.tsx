@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {ReactElement, useEffect, useState} from 'react';
 import {SubwayInfo, TimeInfo} from '../../../types/navigation/types';
-import {CalcArrivalTime, CalcRemainTime} from '../../util/calctime';
+import {CalcArrivalTime, CalcRemainTime, checkDest} from '../../util/calctime';
 import {getArrivalTime} from '../../api/arrivalTimeAPI';
 import {getHomeSchedule} from '../../api/serverAPI';
 import {liveSchedule} from '../../../types/api/awsapiType';
@@ -22,12 +22,14 @@ export function GoHome(): ReactElement {
   const [isVisible, setVisible] = useState<boolean>(false);
   const [subwayinfo, setSubwayInfo] = useState<SubwayInfo[]>([]);
   const [endofService, setEndofService] = useState<boolean>(false);
+  const [alwaysOn, setAlwaysOn] = useState<boolean>(false);
 
   const onRefresh = () => {
     setTimeInfo([]);
     setHome_Bustime([]);
     setSubwayInfo([]);
     setLoading(true);
+    setAlwaysOn(false);
     getLiveBusSchedule();
     setRefreshing(true);
     wait(1000).then(() => setRefreshing(false));
@@ -110,15 +112,36 @@ export function GoHome(): ReactElement {
   };
 
   const getLiveBusSchedule = async () => {
-    const {data} = await getHomeSchedule();
-    return new Promise((resolve, reject) => {
-      if (resolve) {
-        resolve(getKakaoFutureRouteSearch(data));
-        resolve(setupSubwayInfo(data));
-      } else {
-        reject(console.error('error'));
+    const checkTime: 0 | 1 | 2 | undefined = checkDest('하교');
+    switch (checkTime) {
+      case 0: {
+        const {data} = await getHomeSchedule();
+        return new Promise((resolve, reject) => {
+          if (resolve) {
+            resolve(getKakaoFutureRouteSearch(data));
+            resolve(setupSubwayInfo(data));
+          } else {
+            reject(console.error('error'));
+          }
+        });
       }
-    });
+      case 1: {
+        const {data} = await getHomeSchedule();
+        return new Promise((resolve, reject) => {
+          if (resolve) {
+            resolve(setupSubwayInfo(data));
+            resolve(setAlwaysOn(true));
+            resolve(setLoading(false));
+          } else {
+            reject(console.error('error'));
+          }
+        });
+      }
+      default: {
+        console.error('switch error');
+        return;
+      }
+    }
   };
 
   useEffect(() => {
@@ -136,6 +159,8 @@ export function GoHome(): ReactElement {
       isVisible={isVisible}
       subwayinfo={subwayinfo}
       endofService={endofService}
+      alwaysOn={alwaysOn}
+      text="17:00~18:30 까지"
     />
   );
 }

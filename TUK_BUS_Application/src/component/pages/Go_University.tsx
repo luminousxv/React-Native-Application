@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {ReactElement, useEffect, useState} from 'react';
 import {SubwayInfo, TimeInfo} from '../../../types/navigation/types';
-import {CalcArrivalTime, CalcRemainTime} from '../../util/calctime';
+import {CalcArrivalTime, CalcRemainTime, checkDest} from '../../util/calctime';
 import {getArrivalTime} from '../../api/arrivalTimeAPI';
 import {getUnivSchedule} from '../../api/serverAPI';
 import {liveSchedule} from '../../../types/api/awsapiType';
 import LiveSchedule from '../UI/molecule/live_schedule';
 import Loading from './Loading';
+import ExclusiveComponent from '../UI/common/component/exclusive_component';
 
 const wait = (timeout: number) => {
   return new Promise<void>(resolve => {
@@ -22,11 +23,15 @@ export function GoUniversity(): ReactElement {
   const [isVisible, setVisible] = useState<boolean>(false);
   const [subwayinfo, setSubwayInfo] = useState<SubwayInfo[]>([]);
   const [endofService, setEndofService] = useState<boolean>(false);
+  const [alwaysOn, setAlwaysOn] = useState<boolean>(false);
+  const [rideArrival, setRideArrival] = useState<boolean>(false);
 
   const onRefresh = () => {
     setTimeInfo([]);
     setUniv_Bustime([]);
     setSubwayInfo([]);
+    setAlwaysOn(false);
+    setRideArrival(false);
     setLoading(true);
     getLiveBusSchedule();
     setRefreshing(true);
@@ -110,15 +115,41 @@ export function GoUniversity(): ReactElement {
   };
 
   const getLiveBusSchedule = async () => {
-    const {data} = await getUnivSchedule();
-    return new Promise((resolve, reject) => {
-      if (resolve) {
-        resolve(getKakaoFutureRouteSearch(data));
-        resolve(setupSubwayInfo(data));
-      } else {
-        reject(console.error('error'));
+    const checkTime: 0 | 1 | 2 | undefined = checkDest('등교');
+    switch (checkTime) {
+      case 0: {
+        const {data} = await getUnivSchedule();
+        return new Promise((resolve, reject) => {
+          if (resolve) {
+            resolve(getKakaoFutureRouteSearch(data));
+            resolve(setupSubwayInfo(data));
+          } else {
+            reject(console.error('error'));
+          }
+        });
       }
-    });
+      case 1: {
+        const {data} = await getUnivSchedule();
+        return new Promise((resolve, reject) => {
+          if (resolve) {
+            resolve(setupSubwayInfo(data));
+            resolve(setAlwaysOn(true));
+            resolve(setLoading(false));
+          } else {
+            reject(console.error('error'));
+          }
+        });
+      }
+      case 2: {
+        setRideArrival(true);
+        setLoading(false);
+        return;
+      }
+      default: {
+        console.error('switch error');
+        return;
+      }
+    }
   };
 
   useEffect(() => {
@@ -127,6 +158,11 @@ export function GoUniversity(): ReactElement {
 
   return loading ? (
     <Loading />
+  ) : rideArrival ? (
+    <ExclusiveComponent
+      item1={'17시 이후부턴 하교 도착 지점에서 곧바로 탑니다.'}
+      item2={'하교시간표를 참고하세요.'}
+    />
   ) : (
     <LiveSchedule
       timeinfo={timeinfo}
@@ -136,6 +172,8 @@ export function GoUniversity(): ReactElement {
       isVisible={isVisible}
       subwayinfo={subwayinfo}
       endofService={endofService}
+      alwaysOn={alwaysOn}
+      text="08:40~10:20 까지"
     />
   );
 }
