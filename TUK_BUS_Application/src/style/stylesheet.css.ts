@@ -37,6 +37,7 @@ export const styles = StyleSheet.create({
   time_text: {
     fontSize: 30,
     textAlign: 'left',
+    color: 'black',
   },
   left_time_text: {
     textAlign: 'right',
@@ -49,6 +50,7 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     paddingRight: 5,
     marginBottom: 5,
+    color: 'black',
   },
   remain_text: {
     textAlign: 'right',
@@ -176,7 +178,7 @@ export const styles = StyleSheet.create({
     marginRight: 10,
   },
   endofSerivce_container: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     borderRadius: 15,
     borderWidth: 8,
     backgroundColor: '#ffffff',
@@ -189,5 +191,6 @@ export const styles = StyleSheet.create({
   },
   endofService_font: {
     fontSize: 15,
+    color: 'black',
   },
 });
