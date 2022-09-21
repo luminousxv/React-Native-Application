@@ -31,3 +31,113 @@ export const CalcArrivalTime = (time: string, remain: number): string => {
   }
   return arrivalTime_Hour.toString() + ':' + arrivalTime_minute.toString();
 };
+
+export const checkDest = (dest: string) => {
+  switch (dest) {
+    case '등교': {
+      const flag = checkHour_Univ();
+      return flag;
+    }
+    case '하교': {
+      const flag = checkHour_Home();
+      return flag;
+    }
+    default: {
+      console.error('wrong parameter');
+      break;
+    }
+  }
+};
+
+/*
+  flag = 0 정상운행/운행종료 (서버 api 값 확인)
+  flag = 1 -> 상시운행
+  flag = 2 -> 하교 버스 곧바로 타기
+*/
+const checkHour_Univ = () => {
+  const hour: number = parseInt(moment().format('HH'), 10);
+
+  switch (true) {
+    case hour > 7 && hour < 10: {
+      const flag = 1;
+      return flag;
+    }
+    case hour === 10: {
+      const flag = checkMinute(hour);
+      return flag;
+    }
+    case hour === 16: {
+      const flag = checkMinute(hour);
+      return flag;
+    }
+    case hour > 17 && hour < 22: {
+      const flag = 2;
+      return flag;
+    }
+    case hour === 22: {
+      const flag = checkMinute(hour);
+      return flag;
+    }
+    default: {
+      const flag = 0;
+      return flag;
+    }
+  }
+};
+/*
+  flag = 0 정상운행/운행종료 (서버 api 값 확인)
+  flag = 1 -> 상시운행
+*/
+const checkHour_Home = () => {
+  const hour: number = parseInt(moment().format('HH'), 10);
+
+  switch (hour) {
+    case 16: {
+      const flag = checkMinute(hour);
+      return flag;
+    }
+    case 17: {
+      const flag = 1;
+      return flag;
+    }
+    case 18: {
+      const flag = checkMinute(hour);
+      return flag;
+    }
+    default: {
+      const flag = 0;
+      return flag;
+    }
+  }
+};
+
+const checkMinute = (hour: number) => {
+  const minute: number = parseInt(moment().format('mm'), 10);
+
+  switch (true) {
+    case hour === 10 && minute < 20: {
+      const flag = 1;
+      return flag;
+    }
+    case hour === 22 && minute < 40: {
+      const flag = 2;
+      return flag;
+    }
+    case hour === 16 && minute > 50: {
+      const flag = 2;
+      return flag;
+    }
+    case hour === 18 && minute < 30: {
+      const flag = 1;
+      return flag;
+    }
+    case hour === 16 && minute > 50: {
+      const flag = 1;
+      return flag;
+    }
+    default: {
+      const flag = 0;
+      return flag;
+    }
+  }
+};
