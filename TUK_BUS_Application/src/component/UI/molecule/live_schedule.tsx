@@ -2,8 +2,9 @@ import React from 'react';
 import {View} from 'react-native';
 import {SubwayInfo, TimeInfo} from '../../../../types/navigation/types';
 import {styles} from '../../../style/stylesheet.css';
-import EndofService from '../atom/end_of_service_container';
+import ExclusiveComponent from '../common/component/exclusive_component';
 import FlatlistComponent from '../atom/flatlist_container';
+import FullTime from '../atom/full_time_component';
 
 interface IProps {
   timeinfo: TimeInfo[];
@@ -13,6 +14,8 @@ interface IProps {
   isVisible: boolean;
   subwayinfo: SubwayInfo[];
   endofService: boolean;
+  alwaysOn: boolean;
+  text: string;
 }
 
 const LiveSchedule = ({
@@ -23,11 +26,20 @@ const LiveSchedule = ({
   isVisible,
   subwayinfo,
   endofService,
+  alwaysOn,
+  text,
 }: IProps) => {
   return (
     <View style={styles.container}>
       {endofService ? (
-        <EndofService />
+        <ExclusiveComponent item1="운행종료" />
+      ) : alwaysOn ? (
+        <FullTime
+          text={text}
+          subwayinfo={subwayinfo}
+          onRefresh={onRefresh}
+          refreshing={refreshing}
+        />
       ) : (
         <FlatlistComponent
           timeinfo={timeinfo}
