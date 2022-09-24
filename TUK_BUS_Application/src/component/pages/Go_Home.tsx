@@ -112,7 +112,7 @@ export function GoHome(): ReactElement {
   };
 
   const getLiveBusSchedule = async () => {
-    const checkTime: 0 | 1 | 2 | undefined = checkDest('하교');
+    const checkTime = checkDest('하교');
     switch (checkTime) {
       case 0: {
         const {data} = await getHomeSchedule();
