@@ -19,7 +19,7 @@ export function InfoContainer({item}: flatlistParams): ReactElement {
         </View>
         <View style={styles.time_container}>
           <Text style={styles.remain_text}>남은시간</Text>
-          <Text style={styles.arrival_text}>도착예정시간</Text>
+          <Text style={styles.arrival_text}>학교도착시간</Text>
         </View>
       </View>
     </>

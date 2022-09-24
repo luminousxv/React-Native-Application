@@ -151,8 +151,9 @@ export const styles = StyleSheet.create({
     fontSize: 20,
   },
   map_conatiner: {
-    height: 200,
     flex: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   last_map_info_container: {
     backgroundColor: 'white',
@@ -192,5 +193,9 @@ export const styles = StyleSheet.create({
   endofService_font: {
     fontSize: 15,
     color: 'black',
+  },
+  image: {
+    width: 400,
+    height: 400,
   },
 });

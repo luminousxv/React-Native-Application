@@ -115,7 +115,7 @@ export function GoUniversity(): ReactElement {
   };
 
   const getLiveBusSchedule = async () => {
-    const checkTime: 0 | 1 | 2 | undefined = checkDest('등교');
+    const checkTime = checkDest('등교');
     switch (checkTime) {
       case 0: {
         const {data} = await getUnivSchedule();
