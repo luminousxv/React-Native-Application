@@ -32,7 +32,17 @@ export const CalcArrivalTime = (time: string, remain: number): string => {
   return arrivalTime_Hour.toString() + ':' + arrivalTime_minute.toString();
 };
 
-export const checkDest = (dest: string) => {
+export const checkDest = (dest: '등교' | '하교'): 0 | 1 | 2 => {
+  const day: string = moment().format('ddd');
+  switch (day) {
+    case 'Sat' || 'Sun': {
+      const flag = 0;
+      return flag;
+    }
+    default: {
+      break;
+    }
+  }
   switch (dest) {
     case '등교': {
       const flag = checkHour_Univ();
@@ -41,10 +51,6 @@ export const checkDest = (dest: string) => {
     case '하교': {
       const flag = checkHour_Home();
       return flag;
-    }
-    default: {
-      console.error('wrong parameter');
-      break;
     }
   }
 };
@@ -93,7 +99,8 @@ const checkHour_Home = () => {
 
   switch (hour) {
     case 16: {
-      const flag = checkMinute(hour);
+      const minute: number = parseInt(moment().format('mm'), 10);
+      const flag = minute > 50 ? 1 : 0;
       return flag;
     }
     case 17: {
@@ -128,10 +135,6 @@ const checkMinute = (hour: number) => {
       return flag;
     }
     case hour === 18 && minute < 30: {
-      const flag = 1;
-      return flag;
-    }
-    case hour === 16 && minute > 50: {
       const flag = 1;
       return flag;
     }
