@@ -1,6 +1,5 @@
 import React, {ReactElement} from 'react';
-import {Text, View} from 'react-native';
-import {WebView} from 'react-native-webview';
+import {Image, Text, View} from 'react-native';
 import {styles} from '../../../style/stylesheet.css';
 import {LogBox} from 'react-native';
 LogBox.ignoreLogs([
@@ -11,11 +10,10 @@ export function ShuttleLocation_Univ(): ReactElement {
   return (
     <View style={styles.location_container}>
       <View style={styles.map_conatiner}>
-        <WebView
-          originWhitelist={['*']}
-          source={{
-            uri: 'http://tuk-bus.epizy.com/goUniv.html',
-          }}
+        <Image
+          source={require('../../../assets/image/goUniv.png')}
+          resizeMode="stretch"
+          style={styles.image}
         />
       </View>
       <View style={styles.map_info_container}>
@@ -31,16 +29,16 @@ export function ShuttleLocation_Univ_Night(): ReactElement {
   return (
     <View style={styles.location_container}>
       <View style={styles.map_conatiner}>
-        <WebView
-          originWhitelist={['*']}
-          style={styles.map_conatiner}
-          source={{
-            uri: 'http://tuk-bus.epizy.com/goUniv_night.html',
-          }}
+        <Image
+          source={require('../../../assets/image/goUniv_night.png')}
+          resizeMode="stretch"
+          style={styles.image}
         />
       </View>
       <View style={styles.map_info_container}>
-        <Text style={styles.map_info_text}>파리바게트 건너편</Text>
+        <Text style={styles.map_info_text}>
+          파리바게트 건너편(하교 도착 장소)
+        </Text>
       </View>
     </View>
   );
@@ -50,12 +48,10 @@ export function ShuttleLocation_Home(): ReactElement {
   return (
     <View style={styles.location_container}>
       <View style={styles.map_conatiner}>
-        <WebView
-          originWhitelist={['*']}
-          style={styles.map_conatiner}
-          source={{
-            uri: 'http://tuk-bus.epizy.com/goHome.html',
-          }}
+        <Image
+          source={require('../../../assets/image/goHome.png')}
+          resizeMode="stretch"
+          style={styles.image}
         />
       </View>
       <View style={styles.map_info_container}>
