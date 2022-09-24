@@ -3,13 +3,19 @@ import React, {ReactElement, useEffect, useState} from 'react';
 import {FlatList, Text, View} from 'react-native';
 import {DataTable} from 'react-native-paper';
 import {schedule} from '../../../../types/api/awsapiType';
-import {all_schedule, timedata} from '../../../../types/navigation/types';
+import {
+  Props,
+  all_schedule,
+  timedata,
+} from '../../../../types/navigation/types';
 import {getEntireSchedule} from '../../../api/serverAPI';
 import {styles} from '../../../style/stylesheet.css';
 
-export default function TimeTable(): ReactElement {
+export default function TimeTable({route}: Props): ReactElement {
   const [totalschedule] = useState<all_schedule[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const {day} = route.params;
 
   const univschedule: timedata[] = [];
   const homeschedule: timedata[] = [];
@@ -90,7 +96,7 @@ export default function TimeTable(): ReactElement {
   };
 
   const getAllSchedule = async () => {
-    const {data} = await getEntireSchedule();
+    const {data} = await getEntireSchedule(day);
 
     return new Promise((resolve, reject) => {
       if (resolve) {
@@ -119,12 +125,12 @@ export default function TimeTable(): ReactElement {
             <DataTable.Title>등교</DataTable.Title>
             <DataTable.Title>하교</DataTable.Title>
           </DataTable.Header>
-          <DataTable.Row>
-            <DataTable.Cell>
-              <Text>08:40~10:20 상시운행</Text>
-            </DataTable.Cell>
-            <DataTable.Cell>17:00~18:30 상시운행</DataTable.Cell>
-          </DataTable.Row>
+          {day === 'weekday' && (
+            <DataTable.Row>
+              <DataTable.Cell>08:40~10:20 상시운행</DataTable.Cell>
+              <DataTable.Cell>17:00~18:30 상시운행</DataTable.Cell>
+            </DataTable.Row>
+          )}
           <FlatList
             data={totalschedule}
             renderItem={({item}) => {
