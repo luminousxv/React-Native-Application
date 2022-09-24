@@ -1,3 +1,5 @@
+import {MaterialTopTabScreenProps} from '@react-navigation/material-top-tabs';
+
 export type RootStackParamList = {
   TabScreen: undefined;
 };
@@ -14,6 +16,14 @@ export type MaterialTabParamList = {
   '등교(17:30~)': undefined;
   하교: undefined;
 };
+
+export type AllScheduleTabParamList = {
+  평일: {day: string};
+  토요일: {day: string};
+  일요일: {day: string};
+};
+
+export type Props = MaterialTopTabScreenProps<AllScheduleTabParamList>;
 
 export type TimeInfo = {
   time: string;
