@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {ReactElement, useEffect, useState} from 'react';
-import {FlatList, Text, View} from 'react-native';
+import {FlatList, Text, View, LogBox} from 'react-native';
 import {DataTable} from 'react-native-paper';
 import {schedule} from '../../../../types/api/awsapiType';
 import {
@@ -10,6 +10,9 @@ import {
 } from '../../../../types/navigation/types';
 import {getEntireSchedule} from '../../../api/serverAPI';
 import {styles} from '../../../style/stylesheet.css';
+LogBox.ignoreLogs([
+  'Sending `onAnimatedValueUpdate` with no listeners registered.',
+]);
 
 export default function TimeTable({route}: Props): ReactElement {
   const [totalschedule] = useState<all_schedule[]>([]);
