@@ -35,7 +35,11 @@ export const CalcArrivalTime = (time: string, remain: number): string => {
 export const checkDest = (dest: '등교' | '하교'): 0 | 1 | 2 => {
   const day: string = moment().format('ddd');
   switch (day) {
-    case 'Sat' || 'Sun': {
+    case 'Sat': {
+      const flag = 0;
+      return flag;
+    }
+    case 'Sun': {
       const flag = 0;
       return flag;
     }
