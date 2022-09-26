@@ -62,6 +62,16 @@ export function GoHome(): ReactElement {
     for (let i = 0; i < schedule.Bus_schedule.length; i++) {
       switch (schedule.Bus_schedule[i].min) {
         case 0: {
+          if (schedule.Bus_schedule[i].hour === 9) {
+            home_bustime.push(
+              '0' +
+                schedule.Bus_schedule[i].hour +
+                ':' +
+                schedule.Bus_schedule[i].min +
+                '0',
+            );
+            break;
+          }
           home_bustime.push(
             schedule.Bus_schedule[i].hour +
               ':' +
@@ -71,6 +81,16 @@ export function GoHome(): ReactElement {
           break;
         }
         case 5: {
+          if (schedule.Bus_schedule[i].hour === 9) {
+            home_bustime.push(
+              '0' +
+                schedule.Bus_schedule[i].hour +
+                ':' +
+                '0' +
+                schedule.Bus_schedule[i].min,
+            );
+            break;
+          }
           home_bustime.push(
             schedule.Bus_schedule[i].hour +
               ':' +
@@ -80,6 +100,15 @@ export function GoHome(): ReactElement {
           break;
         }
         default: {
+          if (schedule.Bus_schedule[i].hour === 9) {
+            home_bustime.push(
+              '0' +
+                schedule.Bus_schedule[i].hour +
+                ':' +
+                schedule.Bus_schedule[i].min,
+            );
+            break;
+          }
           home_bustime.push(
             schedule.Bus_schedule[i].hour + ':' + schedule.Bus_schedule[i].min,
           );
